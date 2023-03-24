@@ -7,6 +7,7 @@ import android.widget.Filter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.paulomoura.pokedexxml.databinding.RecyclerViewPokemonsRowItemBinding
+import com.paulomoura.pokedexxml.extension.intOrString
 import com.paulomoura.pokedexxml.model.entity.Pokemon
 
 class PokemonsAdapter(private val pokemons: MutableList<Pokemon>) : RecyclerView.Adapter<PokemonsAdapter.PokemonViewHolder>() {
@@ -18,11 +19,12 @@ class PokemonsAdapter(private val pokemons: MutableList<Pokemon>) : RecyclerView
             if (constraint.isNullOrEmpty()) {
                 filteredPokemons.addAll(initialPokemons)
             } else {
-                val query = constraint.toString().trim().lowercase()
-                if (query.toIntOrNull() == null) {
-                    initialPokemons.forEach {if (it.name.lowercase().contains(query)) filteredPokemons.add(it) }
+                val query = constraint.toString().trim()
+                val isQueryName = query.intOrString() is String
+                if (isQueryName) {
+                    initialPokemons.forEach { if (it.name.lowercase().contains(query.lowercase())) filteredPokemons.add(it) }
                 } else {
-                    initialPokemons.forEach {if (it.number.toString().lowercase().contains(query)) filteredPokemons.add(it) }
+                    initialPokemons.forEach { if (it.number.toString().contains(query)) filteredPokemons.add(it) }
                 }
             }
             return FilterResults().apply { values = filteredPokemons }

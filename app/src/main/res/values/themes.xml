@@ -20,4 +20,7 @@
         <!-- App input components color -->
         <item name="colorControlNormal">@color/black</item>
     </style>
+    <style name="SearchView.Pokedex" parent="Widget.AppCompat.SearchView">
+        <item name="android:background">@color/dark_white</item>
+    </style>
 </resources>

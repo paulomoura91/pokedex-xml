@@ -27,17 +27,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupSearchPokemons() {
-        binding.searchViewPokemons.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextChange(newText: String?): Boolean {
-                pokemonAdapter?.filter?.filter(newText)
-                return true
-            }
+        with(binding.searchViewPokemons) {
+            setOnClickListener { isIconified = false }
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    pokemonAdapter?.filter?.filter(newText)
+                    return true
+                }
 
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                pokemonAdapter?.filter?.filter(query)
-                return true
-            }
-        })
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    pokemonAdapter?.filter?.filter(query)
+                    return true
+                }
+            })
+        }
     }
 
     private fun listPokemons() {

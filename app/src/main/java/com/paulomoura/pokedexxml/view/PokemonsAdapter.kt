@@ -19,7 +19,11 @@ class PokemonsAdapter(private val pokemons: MutableList<Pokemon>) : RecyclerView
                 filteredPokemons.addAll(initialPokemons)
             } else {
                 val query = constraint.toString().trim().lowercase()
-                initialPokemons.forEach { if (it.name.lowercase().contains(query)) filteredPokemons.add(it) }
+                if (query.toIntOrNull() == null) {
+                    initialPokemons.forEach {if (it.name.lowercase().contains(query)) filteredPokemons.add(it) }
+                } else {
+                    initialPokemons.forEach {if (it.number.toString().lowercase().contains(query)) filteredPokemons.add(it) }
+                }
             }
             return FilterResults().apply { values = filteredPokemons }
         }

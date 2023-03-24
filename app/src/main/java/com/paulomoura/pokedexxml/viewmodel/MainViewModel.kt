@@ -14,6 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val pokemonService: PokemonService) : ViewModel() {
+
     private val pokemonsMutableLiveData = MutableLiveData<ApiResponse<List<Pokemon>>>()
     val pokemonsLiveData: LiveData<ApiResponse<List<Pokemon>>> = pokemonsMutableLiveData
 

@@ -3,6 +3,7 @@ package com.paulomoura.pokedexxml.view
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.paulomoura.pokedexxml.databinding.ActivityMainBinding
 import com.paulomoura.pokedexxml.extension.bindings
@@ -13,13 +14,30 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
     private val viewModel: MainViewModel by viewModels()
     private val binding: ActivityMainBinding by bindings(ActivityMainBinding::inflate)
+    private var pokemonAdapter: PokemonsAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        setupSearchPokemons()
         listPokemons()
+    }
+
+    private fun setupSearchPokemons() {
+        binding.searchViewPokemons.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String?): Boolean {
+                pokemonAdapter?.filter?.filter(newText)
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                pokemonAdapter?.filter?.filter(query)
+                return true
+            }
+        })
     }
 
     private fun listPokemons() {
@@ -35,16 +53,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showLoadingState() { }
+    private fun showLoadingState() {}
 
     private fun showSuccessState(pokemons: List<Pokemon>?) {
         pokemons?.let {
+            pokemonAdapter = PokemonsAdapter(it.toMutableList())
             with(binding.recyclerViewPokemons) {
                 layoutManager = LinearLayoutManager(this@MainActivity)
-                adapter = PokemonsAdapter(it)
+                adapter = pokemonAdapter
             }
         }
     }
 
-    private fun showErrorState(error: Throwable?) {  }
+    private fun showErrorState(error: Throwable?) {}
 }

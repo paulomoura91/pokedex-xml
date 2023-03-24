@@ -1,9 +1,10 @@
 package com.paulomoura.pokedexxml.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.paulomoura.pokedexxml.R
+import com.paulomoura.pokedexxml.model.net.ApiResponse
 import com.paulomoura.pokedexxml.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,6 +16,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        viewModel.getPokemon()
+        listPokemons()
+    }
+
+    private fun listPokemons() {
+        with(viewModel) {
+            pokemonsLiveData.observe(this@MainActivity) { response ->
+                when (response) {
+                    is ApiResponse.Loading -> ""
+                    is ApiResponse.Success -> ""
+                    is ApiResponse.Error -> ""
+                }
+            }
+            getPokemon()
+        }
     }
 }

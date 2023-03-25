@@ -1,9 +1,12 @@
 package com.paulomoura.pokedexxml.view
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.paulomoura.pokedexxml.databinding.ActivityMainBinding
 import com.paulomoura.pokedexxml.extension.bindings
@@ -56,9 +59,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showLoadingState() {}
+    private fun showLoadingState() {
+        binding.constraintLayoutLoadingView.isVisible = true
+    }
 
     private fun showSuccessState(pokemons: List<Pokemon>?) {
+        binding.constraintLayoutLoadingView.isVisible = false
         pokemons?.let {
             pokemonAdapter = PokemonsAdapter(it.toMutableList())
             with(binding.recyclerViewPokemons) {
@@ -68,5 +74,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showErrorState(error: Throwable?) {}
+    private fun showErrorState(error: Throwable?) {
+        binding.constraintLayoutLoadingView.isVisible = false
+        Toast.makeText(this, "Error at showing Pokémons", Toast.LENGTH_SHORT).show()
+        Log.e("Pokedex Error", error?.message ?: "")
+    }
 }

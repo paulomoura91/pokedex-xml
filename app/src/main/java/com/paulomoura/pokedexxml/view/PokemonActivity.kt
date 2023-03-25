@@ -5,11 +5,13 @@ import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.paulomoura.pokedexxml.R
 import com.paulomoura.pokedexxml.databinding.ActivityPokemonBinding
@@ -52,16 +54,53 @@ class PokemonActivity : AppCompatActivity() {
                     }
                     linearLayoutTypes.addView(textViewType)
                 }
-                if (it.evolutions.size == 1) {
-                    val textViewNoEvolutions = TextView(this@PokemonActivity).apply {
-                        text = getString(R.string.no_evolution)
-                        textSize = 20f
-                        layoutParams = LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
-                        ).apply { topMargin = 16.px }
-                        gravity = Gravity.CENTER_VERTICAL
+                it.evolutions?.let { evolutions ->
+                    if (evolutions.size == 1) {
+                        val textViewNoEvolutions = TextView(this@PokemonActivity).apply {
+                            text = getString(R.string.no_evolution)
+                            textSize = 20f
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                            ).apply {
+                                topMargin = 16.px
+                                bottomMargin = 16.px
+                            }
+                            gravity = Gravity.CENTER_VERTICAL
+                        }
+                        linearLayoutEvolutions.addView(textViewNoEvolutions)
                     }
-                    linearLayoutEvolutions.addView(textViewNoEvolutions)
+                    evolutions.forEach { evolution ->
+                        val imageViewEvolution = ImageView(this@PokemonActivity).apply {
+                            layoutParams = LinearLayout.LayoutParams(128.px, 128.px)
+                        }
+                        val textViewEvolutionName = TextView(this@PokemonActivity).apply {
+                            text = evolution.name
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                            )
+                            gravity = Gravity.CENTER
+                        }
+                        val textViewEvolutionNumber = TextView(this@PokemonActivity).apply {
+                            text = "Nº ${String.format("%03d", evolution.number)}"
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                            )
+                            gravity = Gravity.CENTER
+                        }
+                        val linearLayoutEvolution = LinearLayout(this@PokemonActivity).apply {
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                            ).apply { bottomMargin = 16.px }
+                            orientation = LinearLayout.VERTICAL
+                            gravity = Gravity.CENTER_HORIZONTAL
+                            addView(imageViewEvolution)
+                            addView(textViewEvolutionName)
+                            addView(textViewEvolutionNumber)
+                        }
+                        Glide.with(root).load(evolution.imageUrl).into(imageViewEvolution)
+                        linearLayoutEvolutions.addView(linearLayoutEvolution)
+                    }
+                    linearLayoutEvolutions.isVisible = true
                 }
             }
         }

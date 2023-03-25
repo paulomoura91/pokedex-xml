@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.paulomoura.pokedexxml.extension.assignValue
 import com.paulomoura.pokedexxml.model.datasource.service.PokemonService
 import com.paulomoura.pokedexxml.model.entity.Pokemon
+import com.paulomoura.pokedexxml.model.entity.toPokemon
 import com.paulomoura.pokedexxml.model.net.ApiResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -22,8 +23,8 @@ class MainViewModel @Inject constructor(private val pokemonService: PokemonServi
         pokemonsMutableLiveData.assignValue(ApiResponse.Loading())
         viewModelScope.launch {
             runCatching { pokemonService.getAllPokemons() }
-                .onSuccess { pokemonsMutableLiveData.assignValue(ApiResponse.Success(it)) }
-                .onFailure { pokemonsMutableLiveData.assignValue(ApiResponse.Error(it)) }
+                .onSuccess { pokemonDTOs -> pokemonsMutableLiveData.assignValue(ApiResponse.Success(pokemonDTOs.map { it.toPokemon(pokemonDTOs) })) }
+                .onFailure { error -> pokemonsMutableLiveData.assignValue(ApiResponse.Error(error)) }
         }
     }
 }

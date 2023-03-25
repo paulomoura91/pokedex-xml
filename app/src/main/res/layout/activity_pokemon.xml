@@ -91,6 +91,7 @@
             app:layout_constraintTop_toBottomOf="@+id/text_view_type" />
 
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/linear_layout_evolutions"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -102,7 +103,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linear_layout_types">
+            app:layout_constraintTop_toBottomOf="@+id/linear_layout_types"
+            tools:visibility="visible">
 
             <TextView
                 android:layout_width="match_parent"

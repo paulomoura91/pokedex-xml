@@ -52,13 +52,24 @@ class PokemonActivity : AppCompatActivity() {
                     }
                     linearLayoutTypes.addView(textViewType)
                 }
+                if (it.evolutions.size == 1) {
+                    val textViewNoEvolutions = TextView(this@PokemonActivity).apply {
+                        text = getString(R.string.no_evolution)
+                        textSize = 20f
+                        layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                        ).apply { topMargin = 16.px }
+                        gravity = Gravity.CENTER_VERTICAL
+                    }
+                    linearLayoutEvolutions.addView(textViewNoEvolutions)
+                }
             }
         }
     }
 
     @ColorRes
     private fun getTypeColor(type: String): Int {
-        return when(type) {
+        return when (type) {
             TYPE.grass.toString() -> R.color.green
             TYPE.poison.toString() -> R.color.purple
             TYPE.fire.toString() -> R.color.red

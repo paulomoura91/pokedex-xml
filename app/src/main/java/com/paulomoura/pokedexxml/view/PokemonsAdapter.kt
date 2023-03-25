@@ -10,7 +10,10 @@ import com.paulomoura.pokedexxml.databinding.RecyclerViewPokemonsRowItemBinding
 import com.paulomoura.pokedexxml.extension.intOrString
 import com.paulomoura.pokedexxml.model.entity.Pokemon
 
-class PokemonsAdapter(private val pokemons: MutableList<Pokemon>) : RecyclerView.Adapter<PokemonsAdapter.PokemonViewHolder>() {
+class PokemonsAdapter(
+    private val pokemons: MutableList<Pokemon>,
+    private val onSelectPokemonlistener: (Pokemon) -> Unit
+) : RecyclerView.Adapter<PokemonsAdapter.PokemonViewHolder>() {
 
     private val initialPokemons = buildList { addAll(pokemons) }
     val filter = object : Filter() {
@@ -54,6 +57,7 @@ class PokemonsAdapter(private val pokemons: MutableList<Pokemon>) : RecyclerView
                 textViewNumber.text = number.toString()
                 textViewName.text = name
                 Glide.with(root).load(imageUrl).into(imageView)
+                root.setOnClickListener { onSelectPokemonlistener.invoke(this) }
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.paulomoura.pokedexxml.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -66,12 +67,16 @@ class MainActivity : AppCompatActivity() {
     private fun showSuccessState(pokemons: List<Pokemon>?) {
         binding.constraintLayoutLoadingView.isVisible = false
         pokemons?.let {
-            pokemonAdapter = PokemonsAdapter(it.toMutableList())
+            pokemonAdapter = PokemonsAdapter(it.toMutableList()) { pokemon ->  showDetailPokemon(pokemon) }
             with(binding.recyclerViewPokemons) {
                 layoutManager = LinearLayoutManager(this@MainActivity)
                 adapter = pokemonAdapter
             }
         }
+    }
+
+    private fun showDetailPokemon(pokemon: Pokemon) {
+        startActivity(Intent(this, PokemonActivity::class.java).apply { putExtra(PokemonActivity.POKEMON_EXTRA, pokemon) })
     }
 
     private fun showErrorState(error: Throwable?) {

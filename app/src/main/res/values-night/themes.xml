@@ -23,4 +23,5 @@
     <style name="SearchView.Pokedex" parent="Widget.AppCompat.SearchView">
         <item name="android:background">@color/light_black</item>
     </style>
+    <color name="secondTextColor">@color/dark_white</color>
 </resources>

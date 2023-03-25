@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -42,6 +43,11 @@ class MainActivity : AppCompatActivity() {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     pokemonAdapter?.filter?.filter(query)
                     return true
+                }
+            })
+            onBackPressedDispatcher.addCallback(this@MainActivity, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (query.isNullOrEmpty()) finish() else setQuery("", true)
                 }
             })
         }

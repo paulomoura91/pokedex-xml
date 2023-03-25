@@ -14,13 +14,20 @@ class PokemonActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        val pokemon = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra(POKEMON_EXTRA, Pokemon::class.java)
-        } else {
-            @Suppress("DEPRECATION")
-            intent.getParcelableExtra(POKEMON_EXTRA)
+        val pokemon = getPokemon()
+        showDetails(pokemon)
+    }
+
+    private fun getPokemon() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        intent.getParcelableExtra(POKEMON_EXTRA, Pokemon::class.java)
+    } else {
+        @Suppress("DEPRECATION") intent.getParcelableExtra(POKEMON_EXTRA)
+    }
+
+    private fun showDetails(pokemon: Pokemon?) {
+        pokemon?.let {
+
         }
-        pokemon.toString()
     }
 
     companion object {

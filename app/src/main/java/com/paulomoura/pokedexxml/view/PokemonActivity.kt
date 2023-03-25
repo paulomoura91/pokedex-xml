@@ -1,5 +1,6 @@
 package com.paulomoura.pokedexxml.view
 
+import android.annotation.SuppressLint
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -33,11 +34,12 @@ class PokemonActivity : AppCompatActivity() {
         @Suppress("DEPRECATION") intent.getParcelableExtra(POKEMON_EXTRA)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showDetails(pokemon: Pokemon?) {
         pokemon?.let {
             with(binding) {
                 textViewName.text = it.name
-                textViewNumber.text = it.number.toString()
+                textViewNumber.text = "Nº ${String.format("%03d", it.number)}"
                 Glide.with(root).load(it.imageUrl).into(imageViewUrl)
                 textViewDescription.text = it.description
                 it.types.forEach { type ->

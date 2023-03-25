@@ -54,7 +54,7 @@ class PokemonsAdapter(
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
         with(holder.binding) {
             with(pokemons[position]) {
-                textViewNumber.text = number.toString()
+                textViewNumber.text = String.format("%03d", number)
                 textViewName.text = name
                 Glide.with(root).load(imageUrl).into(imageView)
                 root.setOnClickListener { onSelectPokemonlistener.invoke(this) }

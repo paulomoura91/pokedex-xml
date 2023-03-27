@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                     is ApiResponse.Error -> showErrorState(response.error)
                 }
             }
-            getPokemon()
+            getPokemons()
         }
     }
 

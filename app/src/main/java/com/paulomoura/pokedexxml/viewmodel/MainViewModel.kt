@@ -19,7 +19,7 @@ class MainViewModel @Inject constructor(private val pokemonService: PokemonServi
     private val pokemonsMutableLiveData = MutableLiveData<ApiResponse<List<Pokemon>>>()
     val pokemonsLiveData: LiveData<ApiResponse<List<Pokemon>>> = pokemonsMutableLiveData
 
-    fun getPokemon() {
+    fun getPokemons() {
         pokemonsMutableLiveData.assignValue(ApiResponse.Loading())
         viewModelScope.launch {
             runCatching { pokemonService.getAllPokemons() }

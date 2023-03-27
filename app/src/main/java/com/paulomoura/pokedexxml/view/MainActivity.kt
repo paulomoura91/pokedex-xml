@@ -55,8 +55,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun listPokemons() {
+        showLoadingState()
         lifecycleScope.launch {
-            showLoadingState()
             runCatching { viewModel.getPokemons() }
                 .onSuccess { showSuccessState(it) }
                 .onFailure { showErrorState(it) }

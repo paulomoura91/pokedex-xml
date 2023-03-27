@@ -123,29 +123,29 @@ class PokemonActivity : AppCompatActivity() {
 
     @ColorRes
     private fun getTypeColor(type: String): Int {
-        return when (type) {
-            TYPE.grass.toString() -> R.color.green
-            TYPE.poison.toString() -> R.color.purple
-            TYPE.fire.toString() -> R.color.red
-            TYPE.flying.toString() -> R.color.cornflower_blue
-            TYPE.water.toString() -> R.color.deep_sky_blue
-            TYPE.bug.toString() -> R.color.yellow_green
-            TYPE.normal.toString() -> R.color.light_slate_gray
-            TYPE.electric.toString() -> R.color.gold
-            TYPE.ground.toString() -> R.color.burly_wood
-            TYPE.fairy.toString() -> R.color.hot_pink
-            TYPE.fighting.toString() -> R.color.brown
-            TYPE.psychic.toString() -> R.color.deep_pink
-            TYPE.rock.toString() -> R.color.dark_khaki
-            TYPE.steel.toString() -> R.color.slate_gray
-            TYPE.ice.toString() -> R.color.turquoise
-            TYPE.ghost.toString() -> R.color.dark_slate_blue
-            TYPE.dragon.toString() -> R.color.blue_violet
+        return when (type.uppercase()) {
+            TYPE.GRASS.toString() -> R.color.green
+            TYPE.POISON.toString() -> R.color.purple
+            TYPE.FIRE.toString() -> R.color.red
+            TYPE.FLYING.toString() -> R.color.cornflower_blue
+            TYPE.WATER.toString() -> R.color.deep_sky_blue
+            TYPE.BUG.toString() -> R.color.yellow_green
+            TYPE.NORMAL.toString() -> R.color.light_slate_gray
+            TYPE.ELECTRIC.toString() -> R.color.gold
+            TYPE.GROUND.toString() -> R.color.burly_wood
+            TYPE.FAIRY.toString() -> R.color.hot_pink
+            TYPE.FIGHTING.toString() -> R.color.brown
+            TYPE.PSYCHIC.toString() -> R.color.deep_pink
+            TYPE.ROCK.toString() -> R.color.dark_khaki
+            TYPE.STEEL.toString() -> R.color.slate_gray
+            TYPE.ICE.toString() -> R.color.turquoise
+            TYPE.GHOST.toString() -> R.color.dark_slate_blue
+            TYPE.DRAGON.toString() -> R.color.blue_violet
             else -> R.color.secondTextColor
         }
     }
 
-    internal enum class TYPE { grass, poison, fire, flying, water, bug, normal, electric, ground, fairy, fighting, psychic, rock, steel, ice, ghost, dragon }
+    internal enum class TYPE { GRASS, POISON, FIRE, FLYING, WATER, BUG, NORMAL, ELECTRIC, GROUND, FAIRY, FIGHTING, PSYCHIC, ROCK, STEEL, ICE, GHOST, DRAGON }
 
     companion object {
         const val POKEMON_EXTRA = "pokemon_extra"

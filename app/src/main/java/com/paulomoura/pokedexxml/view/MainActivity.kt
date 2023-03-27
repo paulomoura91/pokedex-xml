@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
     private val binding: ActivityMainBinding by bindings(ActivityMainBinding::inflate)
-    private var pokemonAdapter: PokemonsAdapter? = null
+    private var pokemonAdapter: MainAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     private fun showSuccessState(pokemons: List<Pokemon>?) {
         binding.constraintLayoutLoadingView.isVisible = false
         pokemons?.let {
-            pokemonAdapter = PokemonsAdapter(it.toMutableList()) { pokemon ->  showDetailPokemon(pokemon) }
+            pokemonAdapter = MainAdapter(it.toMutableList()) { pokemon ->  showDetailPokemon(pokemon) }
             with(binding.recyclerViewPokemons) {
                 layoutManager = LinearLayoutManager(this@MainActivity)
                 adapter = pokemonAdapter

@@ -10,10 +10,10 @@ import com.paulomoura.pokedexxml.databinding.RecyclerViewPokemonsRowItemBinding
 import com.paulomoura.pokedexxml.extension.intOrString
 import com.paulomoura.pokedexxml.model.entity.Pokemon
 
-class PokemonsAdapter(
+class MainAdapter(
     private val pokemons: MutableList<Pokemon>,
     private val onSelectPokemonlistener: (Pokemon) -> Unit
-) : RecyclerView.Adapter<PokemonsAdapter.PokemonViewHolder>() {
+) : RecyclerView.Adapter<MainAdapter.PokemonViewHolder>() {
 
     private val initialPokemons = buildList { addAll(pokemons) }
     val filter = object : Filter() {

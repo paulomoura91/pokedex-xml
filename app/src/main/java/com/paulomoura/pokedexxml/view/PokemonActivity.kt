@@ -1,7 +1,7 @@
 package com.paulomoura.pokedexxml.view
 
-import android.annotation.SuppressLint
 import android.graphics.Typeface
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
@@ -17,6 +17,7 @@ import com.paulomoura.pokedexxml.R
 import com.paulomoura.pokedexxml.databinding.ActivityPokemonBinding
 import com.paulomoura.pokedexxml.extension.bindings
 import com.paulomoura.pokedexxml.extension.px
+import com.paulomoura.pokedexxml.extension.toPokemonNumber
 import com.paulomoura.pokedexxml.model.entity.Pokemon
 
 class PokemonActivity : AppCompatActivity() {
@@ -36,74 +37,88 @@ class PokemonActivity : AppCompatActivity() {
         @Suppress("DEPRECATION") intent.getParcelableExtra(POKEMON_EXTRA)
     }
 
-    @SuppressLint("SetTextI18n")
     private fun showDetails(pokemon: Pokemon?) {
         pokemon?.let {
             with(binding) {
                 textViewName.text = it.name
-                textViewNumber.text = "Nº ${String.format("%03d", it.number)}"
+                textViewNumber.text = it.number.toPokemonNumber()
                 Glide.with(root).load(it.imageUrl).into(imageViewUrl)
                 textViewDescription.text = it.description
                 it.types.forEach { type ->
-                    val textViewType = TextView(this@PokemonActivity).apply {
-                        text = type.uppercase()
-                        setTypeface(typeface, Typeface.BOLD)
-                        layoutParams = LinearLayout.LayoutParams(128.px, 40.px).apply { marginEnd = 16.px }
-                        gravity = Gravity.CENTER
-                        setBackgroundColor(ContextCompat.getColor(this@PokemonActivity, getTypeColor(type)))
-                    }
-                    linearLayoutTypes.addView(textViewType)
+                    linearLayoutTypes.addView(buildTextViewType(type))
                 }
                 it.evolutions?.let { evolutions ->
                     if (evolutions.size == 1) {
-                        val textViewNoEvolutions = TextView(this@PokemonActivity).apply {
-                            text = getString(R.string.no_evolution)
-                            textSize = 20f
-                            layoutParams = LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
-                            ).apply {
-                                topMargin = 16.px
-                                bottomMargin = 16.px
-                            }
-                            gravity = Gravity.CENTER_VERTICAL
-                        }
-                        linearLayoutEvolutions.addView(textViewNoEvolutions)
+                        linearLayoutEvolutions.addView(buildTextViewNoEvolution())
                     }
                     evolutions.forEach { evolution ->
-                        val imageViewEvolution = ImageView(this@PokemonActivity).apply {
-                            layoutParams = LinearLayout.LayoutParams(128.px, 128.px)
-                        }
-                        val textViewEvolutionName = TextView(this@PokemonActivity).apply {
-                            text = evolution.name
-                            layoutParams = LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
-                            )
-                            gravity = Gravity.CENTER
-                        }
-                        val textViewEvolutionNumber = TextView(this@PokemonActivity).apply {
-                            text = "Nº ${String.format("%03d", evolution.number)}"
-                            layoutParams = LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
-                            )
-                            gravity = Gravity.CENTER
-                        }
-                        val linearLayoutEvolution = LinearLayout(this@PokemonActivity).apply {
-                            layoutParams = LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-                            ).apply { bottomMargin = 16.px }
-                            orientation = LinearLayout.VERTICAL
-                            gravity = Gravity.CENTER_HORIZONTAL
-                            addView(imageViewEvolution)
-                            addView(textViewEvolutionName)
-                            addView(textViewEvolutionNumber)
-                        }
-                        Glide.with(root).load(evolution.imageUrl).into(imageViewEvolution)
-                        linearLayoutEvolutions.addView(linearLayoutEvolution)
+                        linearLayoutEvolutions.addView(buildLinearLayoutEvolution(evolution))
                     }
                     linearLayoutEvolutions.isVisible = true
                 }
             }
         }
+    }
+
+    private fun buildTextViewType(type: String): TextView {
+        return TextView(this@PokemonActivity).apply {
+            text = type.uppercase()
+            setTypeface(typeface, Typeface.BOLD)
+            layoutParams = LinearLayout.LayoutParams(128.px, 40.px).apply { marginEnd = 16.px }
+            gravity = Gravity.CENTER
+            background = GradientDrawable().apply {
+                cornerRadius = 64f
+                setColor(ContextCompat.getColor(this@PokemonActivity, getTypeColor(type)))
+            }
+        }
+    }
+
+    private fun buildTextViewNoEvolution(): TextView {
+        return TextView(this@PokemonActivity).apply {
+            text = getString(R.string.no_evolution)
+            textSize = 20f
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                topMargin = 16.px
+                bottomMargin = 16.px
+            }
+            gravity = Gravity.CENTER_VERTICAL
+        }
+    }
+
+    private fun buildLinearLayoutEvolution(evolution: Pokemon): LinearLayout {
+        val imageViewEvolution = ImageView(this@PokemonActivity).apply {
+            layoutParams = LinearLayout.LayoutParams(128.px, 128.px)
+        }
+        val textViewEvolutionName = TextView(this@PokemonActivity).apply {
+            text = evolution.name
+            textSize = 20f
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            gravity = Gravity.CENTER
+        }
+        val textViewEvolutionNumber = TextView(this@PokemonActivity).apply {
+            text = evolution.number.toPokemonNumber()
+            textSize = 20f
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            gravity = Gravity.CENTER
+        }
+        val linearLayoutEvolution = LinearLayout(this@PokemonActivity).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply { bottomMargin = 16.px }
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER_HORIZONTAL
+            addView(imageViewEvolution)
+            addView(textViewEvolutionName)
+            addView(textViewEvolutionNumber)
+        }
+        Glide.with(binding.root).load(evolution.imageUrl).into(imageViewEvolution)
+        return linearLayoutEvolution
     }
 
     @ColorRes
@@ -116,7 +131,7 @@ class PokemonActivity : AppCompatActivity() {
             TYPE.water.toString() -> R.color.deep_sky_blue
             TYPE.bug.toString() -> R.color.yellow_green
             TYPE.normal.toString() -> R.color.light_slate_gray
-            TYPE.electric.toString() -> R.color.yellow
+            TYPE.electric.toString() -> R.color.gold
             TYPE.ground.toString() -> R.color.burly_wood
             TYPE.fairy.toString() -> R.color.hot_pink
             TYPE.fighting.toString() -> R.color.brown

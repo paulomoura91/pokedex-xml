@@ -9,13 +9,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.paulomoura.pokedexxml.databinding.ActivityMainBinding
 import com.paulomoura.pokedexxml.extension.bindings
 import com.paulomoura.pokedexxml.model.entity.Pokemon
-import com.paulomoura.pokedexxml.model.net.ApiResponse
 import com.paulomoura.pokedexxml.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -54,15 +55,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun listPokemons() {
-        with(viewModel) {
-            pokemonsLiveData.observe(this@MainActivity) { response ->
-                when (response) {
-                    is ApiResponse.Loading -> showLoadingState()
-                    is ApiResponse.Success -> showSuccessState(response.data)
-                    is ApiResponse.Error -> showErrorState(response.error)
-                }
-            }
-            getPokemons()
+        lifecycleScope.launch {
+            showLoadingState()
+            runCatching { viewModel.getPokemons() }
+                .onSuccess { showSuccessState(it) }
+                .onFailure { showErrorState(it) }
         }
     }
 
